@@ -13,21 +13,27 @@ public class ParkingLot extends AbstractParkingLot {
     public ParkingLot(int totalSpots, int electricSpots, int premiumSpots) {
         super(totalSpots, electricSpots, premiumSpots);
 
-        int normal = totalSpots - electricSpots - premiumSpots;
+        int adjustedElectric = electricSpots;
+        int adjustedPremium = premiumSpots;
+
+        if (electricSpots + premiumSpots > totalSpots) {
+            adjustedPremium = Math.max(0, totalSpots - electricSpots);
+        }
+
+        int normal = totalSpots - adjustedElectric - adjustedPremium;
 
         for (int i = 0; i < normal; i++) {
             spots.add(new ParkingSpot(SpotType.NORMAL));
         }
-        for (int i = 0; i < electricSpots; i++) {
+        for (int i = 0; i < adjustedElectric; i++) {
             spots.add(new ParkingSpot(SpotType.ELECTRIC));
         }
-        for (int i = 0; i < premiumSpots; i++) {
+        for (int i = 0; i < adjustedPremium; i++) {
             spots.add(new ParkingSpot(SpotType.PREMIUM));
         }
     }
 
     // Метод обработки события въезда автомобиля на парковку
-    @Override
     public void enter(String carType, String number) throws ParkingException {
         try {
             if (parkedCars.containsKey(number)) {
