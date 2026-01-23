@@ -11,7 +11,7 @@ public enum CarType {
         try {
             return CarType.valueOf(value);
         } catch (Exception e) {
-            throw new ParkingException("unknown car type");
+            throw new ParkingException("unknown car type: " + value);
         }
     }
 }
